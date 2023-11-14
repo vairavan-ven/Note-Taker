@@ -18,20 +18,20 @@ app.get('/notes', (req, res) =>
   res.sendFile(path.join(__dirname, '/public/notes.html'))
 );
 
-app.get('*', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/index.html'))
-);
+
 
 // Read notes from the db.json file
 const readNotes = () => {
-    const data = fs.readFileSync('db.json', 'utf8');
+    const data = fs.readFileSync(path.join(__dirname, 'db', 'db.json'), 'utf8');
     return JSON.parse(data) || [];
 };
 
 // Write notes to the db.json file
 const writeNotes = (notes) => {
-    fs.writeFileSync('db.json', JSON.stringify(notes, null, 2), 'utf8');
+    fs.writeFileSync(path.join(__dirname, 'db', 'db.json'), JSON.stringify(notes, null, 2), 'utf8');
 };
+
+
 
 // GET route to retrieve all notes
 app.get('/api/notes', (req, res) => {
@@ -48,6 +48,10 @@ app.post('/api/notes', (req, res) => {
     writeNotes(notes);
     res.json(newNote);
 });
+
+app.get('*', (req, res) =>
+  res.sendFile(path.join(__dirname, '/public/index.html'))
+);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
